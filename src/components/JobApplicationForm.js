@@ -11,6 +11,7 @@ const jobSchema = yup.object().shape({
   position: yup.string().required('Position is required'),
   relevantExperience: yup
     .number()
+    .positive("Experience should be greater than 0")
     .typeError('Relevant Experience must be a number')
     .when('position', {
       is: (val) => val === 'Developer' || val === 'Designer',
@@ -26,7 +27,8 @@ const jobSchema = yup.object().shape({
       otherwise: (schema) => schema.notRequired(),
     }),
   managementExperience: yup
-    .string()
+    .number()
+    .positive("Experience should be greater than 0")
     .when('position', {
       is: 'Manager',
       then: (schema) => schema.required('Management Experience is required'),
@@ -145,7 +147,7 @@ const JobApplicationForm = () => {
               <Controller
                 name="managementExperience"
                 control={control}
-                render={({ field }) => <input type="text" {...field} />}
+                render={({ field }) => <input type="number" {...field} />}
               />
               {errors.managementExperience && <p>{errors.managementExperience.message}</p>}
             </div>
